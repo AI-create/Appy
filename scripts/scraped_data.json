@@ -1,0 +1,372 @@
+{
+    "proxy": {
+        "https": "http://85.210.121.11:8080"
+    },
+    "url": "https://dog.ceo/api/breeds/image/random",
+    "response": {
+        "message": "https://images.dog.ceo/breeds/spaniel-irish/n02102973_3646.jpg",
+        "status": "success"
+    }
+}
+{
+    "proxy": {
+        "https": "http://85.210.121.11:8080"
+    },
+    "url": "https://dog.ceo/api/breeds/image/random",
+    "response": {
+        "message": "https://images.dog.ceo/breeds/pekinese/n02086079_2073.jpg",
+        "status": "success"
+    }
+}
+{
+    "proxy": {
+        "https": "http://20.26.249.29:8080"
+    },
+    "url": "https://dog.ceo/api/breeds/image/random",
+    "response": {
+        "message": "https://images.dog.ceo/breeds/husky/n02110185_13158.jpg",
+        "status": "success"
+    }
+}
+{
+    "proxy": {
+        "https": "http://20.26.249.29:8080"
+    },
+    "url": "https://catfact.ninja/fact",
+    "response": {
+        "fact": "Statistics indicate that animal lovers in recent years have shown a preference for cats over dogs!",
+        "length": 98
+    }
+}
+{
+    "proxy": {
+        "https": "http://211.104.20.205:8080"
+    },
+    "url": "https://dog.ceo/api/breeds/image/random",
+    "response": {
+        "message": "https://images.dog.ceo/breeds/leonberg/n02111129_2378.jpg",
+        "status": "success"
+    }
+}
+{
+    "proxy": {
+        "https": "http://211.104.20.205:8080"
+    },
+    "url": "https://catfact.ninja/fact",
+    "response": {
+        "fact": "Cats are North America\u2019s most popular pets: there are 73 million cats compared to 63 million dogs. Over 30% of households in North America own a cat.",
+        "length": 149
+    }
+}
+{
+    "proxy": {
+        "https": "http://85.210.121.11:8080"
+    },
+    "url": "https://catfact.ninja/fact",
+    "response": {
+        "fact": "It has been scientifically proven that owning cats is good for our health and can decrease the occurrence of high blood pressure and other illnesses.",
+        "length": 149
+    }
+}
+{
+    "proxy": {
+        "https": "http://20.26.249.29:8080"
+    },
+    "url": "https://dog.ceo/api/breeds/image/random",
+    "response": {
+        "message": "https://images.dog.ceo/breeds/african/n02116738_7506.jpg",
+        "status": "success"
+    }
+}
+{
+    "proxy": {
+        "https": "http://20.26.249.29:8080"
+    },
+    "url": "https://catfact.ninja/fact",
+    "response": {
+        "fact": "If they have ample water, cats can tolerate temperatures up to 133 \u00b0F.",
+        "length": 70
+    }
+}
+{
+    "proxy": {
+        "https": "http://20.26.249.29:8080"
+    },
+    "url": "https://api.thecatapi.com/v1/images/search",
+    "response": [
+        {
+            "id": "18t",
+            "url": "https://cdn2.thecatapi.com/images/18t.gif",
+            "width": 307,
+            "height": 139
+        }
+    ]
+}
+{
+    "proxy": {
+        "https": "http://20.26.249.29:8080"
+    },
+    "url": "https://randomuser.me/api/",
+    "response": {
+        "results": [
+            {
+                "gender": "male",
+                "name": {
+                    "title": "Mr",
+                    "first": "Israel",
+                    "last": "Palomo"
+                },
+                "location": {
+                    "street": {
+                        "number": 1978,
+                        "name": "Calle Norte Varela"
+                    },
+                    "city": "Ixtl\u00e1n de Ju\u00e1rez",
+                    "state": "Tabasco",
+                    "country": "Mexico",
+                    "postcode": 94309,
+                    "coordinates": {
+                        "latitude": "21.7744",
+                        "longitude": "-65.5174"
+                    },
+                    "timezone": {
+                        "offset": "-9:00",
+                        "description": "Alaska"
+                    }
+                },
+                "email": "israel.palomo@example.com",
+                "login": {
+                    "uuid": "7a2336de-5ae8-422c-b34a-b51600318a23",
+                    "username": "crazyostrich761",
+                    "password": "chucky",
+                    "salt": "vP6IijW7",
+                    "md5": "8be361a7c7afa14fce15640a36392099",
+                    "sha1": "f213b2715bd56a59c5147ff3e0d44fae32184a63",
+                    "sha256": "9dca85e06e80840bfad49934d2222c59b3a20ba85ee71be7a8a2cfd62508a761"
+                },
+                "dob": {
+                    "date": "1963-09-25T22:25:30.792Z",
+                    "age": 61
+                },
+                "registered": {
+                    "date": "2004-05-12T23:05:57.470Z",
+                    "age": 20
+                },
+                "phone": "(600) 205 6122",
+                "cell": "(677) 143 5018",
+                "id": {
+                    "name": "NSS",
+                    "value": "33 56 97 9395 3"
+                },
+                "picture": {
+                    "large": "https://randomuser.me/api/portraits/men/43.jpg",
+                    "medium": "https://randomuser.me/api/portraits/med/men/43.jpg",
+                    "thumbnail": "https://randomuser.me/api/portraits/thumb/men/43.jpg"
+                },
+                "nat": "MX"
+            }
+        ],
+        "info": {
+            "seed": "2abed50867d26c2e",
+            "results": 1,
+            "page": 1,
+            "version": "1.4"
+        }
+    }
+}
+{
+    "proxy": {
+        "https": "http://20.26.249.29:8080"
+    },
+    "url": "https://jsonplaceholder.typicode.com/posts/1",
+    "response": {
+        "userId": 1,
+        "id": 1,
+        "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+        "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    }
+}
+{
+    "proxy": {
+        "https": "http://211.104.20.205:8080"
+    },
+    "url": "https://dog.ceo/api/breeds/image/random",
+    "response": {
+        "message": "https://images.dog.ceo/breeds/gaddi-indian/Gaddi.jpg",
+        "status": "success"
+    }
+}
+{
+    "proxy": {
+        "https": "http://211.104.20.205:8080"
+    },
+    "url": "https://catfact.ninja/fact",
+    "response": {
+        "fact": "Cats can be right-pawed or left-pawed.",
+        "length": 38
+    }
+}
+{
+    "proxy": {
+        "https": "http://211.104.20.205:8080"
+    },
+    "url": "https://api.thecatapi.com/v1/images/search",
+    "response": [
+        {
+            "id": "7hc",
+            "url": "https://cdn2.thecatapi.com/images/7hc.jpg",
+            "width": 500,
+            "height": 333
+        }
+    ]
+}
+{
+    "proxy": {
+        "https": "http://211.104.20.205:8080"
+    },
+    "url": "https://jsonplaceholder.typicode.com/posts/1",
+    "response": {
+        "userId": 1,
+        "id": 1,
+        "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+        "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    }
+}
+{
+    "proxy": {
+        "https": "http://116.99.173.71:8118"
+    },
+    "url": "https://dog.ceo/api/breeds/image/random",
+    "response": {
+        "message": "https://images.dog.ceo/breeds/spaniel-irish/n02102973_3303.jpg",
+        "status": "success"
+    }
+}
+{
+    "proxy": {
+        "https": "http://116.99.173.71:8118"
+    },
+    "url": "https://catfact.ninja/fact",
+    "response": {
+        "fact": "The female cat reaches sexual maturity within 6 to 10 months; most veterinarians suggest spaying the female at 5 months, before her first heat period. The male cat usually reaches sexual maturity between 9 and 12 months.",
+        "length": 220
+    }
+}
+{
+    "proxy": {
+        "https": "http://116.99.173.71:8118"
+    },
+    "url": "https://api.thecatapi.com/v1/images/search",
+    "response": [
+        {
+            "id": "bij",
+            "url": "https://cdn2.thecatapi.com/images/bij.jpg",
+            "width": 500,
+            "height": 333
+        }
+    ]
+}
+{
+    "proxy": {
+        "https": "http://116.99.173.71:8118"
+    },
+    "url": "https://randomuser.me/api/",
+    "response": {
+        "results": [
+            {
+                "gender": "female",
+                "name": {
+                    "title": "Miss",
+                    "first": "Augusta",
+                    "last": "Bj\u00f8nnes"
+                },
+                "location": {
+                    "street": {
+                        "number": 6092,
+                        "name": "Lilleakerveien"
+                    },
+                    "city": "Kopervik",
+                    "state": "Vest-Agder",
+                    "country": "Norway",
+                    "postcode": "8311",
+                    "coordinates": {
+                        "latitude": "42.4976",
+                        "longitude": "57.5784"
+                    },
+                    "timezone": {
+                        "offset": "-8:00",
+                        "description": "Pacific Time (US & Canada)"
+                    }
+                },
+                "email": "augusta.bjonnes@example.com",
+                "login": {
+                    "uuid": "2122986e-eebb-44eb-8883-4fa78ad8719a",
+                    "username": "brownfish966",
+                    "password": "lucille",
+                    "salt": "5TRt3UVF",
+                    "md5": "44497bb957375c40bfc1e30b3c26b57c",
+                    "sha1": "228ef515ef93d816b186c9979aeb451b4d53321e",
+                    "sha256": "f59191589e3bb499557584d13b1d0ed7b26555822f2808721957b63356b83814"
+                },
+                "dob": {
+                    "date": "1980-12-19T18:31:06.437Z",
+                    "age": 43
+                },
+                "registered": {
+                    "date": "2011-11-22T09:56:33.608Z",
+                    "age": 12
+                },
+                "phone": "68540569",
+                "cell": "44911233",
+                "id": {
+                    "name": "FN",
+                    "value": "19128019866"
+                },
+                "picture": {
+                    "large": "https://randomuser.me/api/portraits/women/51.jpg",
+                    "medium": "https://randomuser.me/api/portraits/med/women/51.jpg",
+                    "thumbnail": "https://randomuser.me/api/portraits/thumb/women/51.jpg"
+                },
+                "nat": "NO"
+            }
+        ],
+        "info": {
+            "seed": "60e7c4fbe4617e2f",
+            "results": 1,
+            "page": 1,
+            "version": "1.4"
+        }
+    }
+}
+{
+    "proxy": {
+        "https": "http://116.99.173.71:8118"
+    },
+    "url": "https://jsonplaceholder.typicode.com/posts/1",
+    "response": {
+        "userId": 1,
+        "id": 1,
+        "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+        "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    }
+}
+{
+    "proxy": {
+        "https": "http://40.76.69.94:8080"
+    },
+    "url": "https://dog.ceo/api/breeds/image/random",
+    "response": {
+        "message": "https://images.dog.ceo/breeds/beagle/n02088364_12710.jpg",
+        "status": "success"
+    }
+}
+{
+    "proxy": {
+        "https": "http://40.76.69.94:8080"
+    },
+    "url": "https://catfact.ninja/fact",
+    "response": {
+        "fact": "Cats are subject to gum disease and to dental caries. They should have their teeth cleaned by the vet or the cat dentist once a year.",
+        "length": 133
+    }
+}

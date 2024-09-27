@@ -2,7 +2,7 @@ import uiautomator2 as u2
 import time
 
 # Connect to the Android device
-device = u2.connect()  # Automatically connect to the first available device
+device = u2.connect('emulator-5554')  # Automatically connect to the first available device
 
 # Verify connection
 if device.info:
