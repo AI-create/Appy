@@ -124,6 +124,9 @@ def run_automation_script():
     device.app_stop(app_package)
     print("App closed.")
 
+# Run the automation script immediately at startup
+run_automation_script()
+
 # Schedule the script to run every 1 minute
 schedule.every(1).minutes.do(run_automation_script)
 
