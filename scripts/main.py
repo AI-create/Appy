@@ -163,32 +163,39 @@ html_template = """
 # Lifespan event handler to manage subprocess
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    try:
-        python_executable = sys.executable
-        script_path_uiautomator = r'C:\Appy\scripts\uiautomator_deviceinfo.py'
-        script_path_proxy = r'C:\Appy\scripts\proxy_rotation.py'
+    processes = []
 
-        # Launch uiautomator_deviceinfo.py as a subprocess
-        process_uiautomator = subprocess.Popen([python_executable, script_path_uiautomator], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print(f"Started {script_path_uiautomator} successfully!")
-        
-        # Launch proxy_rotation.py as a subprocess
-        process_proxy = subprocess.Popen([python_executable, script_path_proxy], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print(f"Started {script_path_proxy} successfully!")
+    try:
+        # Path to the Python executable
+        python_executable = sys.executable
+
+        # Define the scripts to run
+        scripts_to_run = [
+            r'C:\Appy\scripts\uiautomator_deviceinfo.py',
+            r'C:\Appy\scripts\zeb.py',
+            r'C:\Appy\scripts\chrome_analysis.py'
+        ]
+
+        # Launch each script as a subprocess
+        for script in scripts_to_run:
+            try:
+                process = subprocess.Popen([python_executable, script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                processes.append(process)
+                print(f"Started {script} successfully!")
+
+            except Exception as e:
+                print(f"Error starting {script}: {e}")
 
     except Exception as e:
-        print(f"Error starting subprocess: {e}")
-    
-    yield
-    
-    # Terminate the subprocesses if they are still running
-    if process_uiautomator.poll() is None:
-        process_uiautomator.terminate()
-        print("Terminated uiautomator_deviceinfo.py on shutdown.")
+        print(f"Error during subprocess initialization: {e}")
 
-    if process_proxy.poll() is None:
-        process_proxy.terminate()
-        print("Terminated proxy_rotation.py on shutdown.")
+    yield
+
+    # Terminate all subprocesses on shutdown
+    for process in processes:
+        if process.poll() is None:  # Check if process is still running
+            process.terminate()
+            print(f"Terminated subprocess: {process.args}")
 
 app = FastAPI(lifespan=lifespan)
 
@@ -237,7 +244,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
             # Filter data for only the past 2 hours
             current_time = datetime.now()
-            two_hours_ago = current_time - timedelta(hours=2)
+            two_hours_ago = current_time - timedelta(hours=24)
 
             filtered_data = [
                 entry for entry in data
@@ -248,7 +255,9 @@ async def websocket_endpoint(websocket: WebSocket):
             battery_levels = [int(entry["Battery level"]) for entry in filtered_data]
 
             if len(timestamps) == 0 or len(battery_levels) == 0:
-                raise ValueError("No valid battery levels or timestamps found in device_info.json")
+                print("No data for the past 2 hours, waiting for current data...")
+                await asyncio.sleep(60)  # Wait for 1 minute and retry
+                continue  # Retry the loop to check for new data
 
             # Prepare Plotly trace for the graph
             trace = go.Scatter(
