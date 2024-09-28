@@ -9,21 +9,32 @@ from fastapi.responses import HTMLResponse
 import uvicorn
 import sys
 import asyncio
+from celery import Celery
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 
+# FastAPI app setup
 app = FastAPI()
+
+# Celery app setup
+celery_app = Celery(
+    "tasks",
+    broker="redis://localhost:6379/0",  # Redis as the message broker
+    backend="redis://localhost:6379/0",  # Redis as the result backend
+)
 
 # Path to the JSON file in the C:\Appy\scripts directory
 json_file_path = os.path.join(os.getcwd(), 'device_info.json')
 
 # Path to the SQLite database
-db_path = os.path.join(os.getcwd(), 'device_data.db')
+ddb_path = os.path.join(os.getcwd(), 'device_data.db')
+
+adb_path = os.path.join(os.getcwd(), 'apk_metadata.db')
 
 # Create and initialize SQLite database table for device information
 def init_db():
     try:
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect(ddb_path)
         cursor = conn.cursor()
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS device_info (
@@ -47,7 +58,7 @@ def init_db():
 # Function to insert data into SQLite
 def insert_into_db(data):
     try:
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect(ddb_path)
         cursor = conn.cursor()
         cursor.execute('''
         INSERT INTO device_info (about_device, device_name, model, processor, ram, battery_capacity, battery_level, timestamp)
@@ -70,6 +81,26 @@ def insert_into_db(data):
 
 # Initialize the database on startup
 init_db()
+
+# Celery task to fetch data and insert it into SQLite
+@celery_app.task(bind=True, retry_backoff=10, max_retries=5)
+def fetch_and_store_data(self):
+    try:
+        # Read JSON file and insert data into SQLite
+        with open(json_file_path, 'r') as json_file:
+            data = json.load(json_file)
+
+        # Insert each entry into the database
+        for entry in data:
+            insert_into_db(entry)
+        
+        print("Data inserted successfully into the database.")
+        return "Success"
+
+    except Exception as exc:
+        # Retry the task if it fails
+        raise self.retry(exc=exc)
+
 
 # HTML Template for displaying device information and battery insights
 html_template = """
