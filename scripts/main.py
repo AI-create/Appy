@@ -19,19 +19,16 @@ app = FastAPI()
 # Celery app setup
 celery_app = Celery(
     "tasks",
-    broker="redis://localhost:6379/0",  # Redis as the message broker
-    backend="redis://localhost:6379/0",  # Redis as the result backend
+    broker="redis://localhost:6379/0", 
+    backend="redis://localhost:6379/0",  
 )
 
-# Path to the JSON file in the C:\Appy\scripts directory
+# Paths
 json_file_path = os.path.join(os.getcwd(), 'device_info.json')
-
-# Path to the SQLite database
 ddb_path = os.path.join(os.getcwd(), 'device_data.db')
-
 adb_path = os.path.join(os.getcwd(), 'apk_metadata.db')
+crypto_db_path = os.path.join(os.getcwd(), 'zebpay_data.db')  # Crypto data DB path
 
-# Create and initialize SQLite database table for device information
 def init_db():
     try:
         conn = sqlite3.connect(ddb_path)
@@ -55,7 +52,6 @@ def init_db():
     finally:
         conn.close()
 
-# Function to insert data into SQLite
 def insert_into_db(data):
     try:
         conn = sqlite3.connect(ddb_path)
@@ -79,44 +75,81 @@ def insert_into_db(data):
     finally:
         conn.close()
 
+# APK metadata table function
+def get_latest_apk_metadata():
+    try:
+        conn = sqlite3.connect(adb_path)
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM apk_metadata ORDER BY id DESC LIMIT 1')
+        row = cursor.fetchone()
+        if row:
+            return {
+                'package_name': row[1],
+                'version': row[2],
+                'permissions': row[3],
+                'activities': row[4],
+                'services': row[5],
+                'receivers': row[6],
+                'providers': row[7],
+                'files': row[8],
+                'timestamp': row[9]
+            }
+        else:
+            return {}
+    except sqlite3.Error as e:
+        print(f"Error fetching data from APK metadata: {e}")
+    finally:
+        conn.close()
+
+# Function to fetch cryptocurrency data from SQLite
+def get_crypto_data():
+    try:
+        conn = sqlite3.connect(crypto_db_path)
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM zebpay_data ORDER BY id DESC LIMIT 10')
+        rows = cursor.fetchall()
+        crypto_data = []
+        for row in rows:
+            crypto_data.append({
+                'market': row[1],
+                'volumeEx': row[2],
+                'volumeQt': row[3],
+                'pricechange': row[4],
+                'quickTradePrice': row[5],
+                'pair': row[6],
+                'virtualCurrency': row[7],
+                'currency': row[8],
+                'volume': row[9]
+            })
+        return crypto_data
+    except sqlite3.Error as e:
+        print(f"Error fetching cryptocurrency data: {e}")
+        return []
+    finally:
+        conn.close()
+
 # Initialize the database on startup
 init_db()
 
-# Celery task to fetch data and insert it into SQLite
-@celery_app.task(bind=True, retry_backoff=10, max_retries=5)
-def fetch_and_store_data(self):
-    try:
-        # Read JSON file and insert data into SQLite
-        with open(json_file_path, 'r') as json_file:
-            data = json.load(json_file)
-
-        # Insert each entry into the database
-        for entry in data:
-            insert_into_db(entry)
-        
-        print("Data inserted successfully into the database.")
-        return "Success"
-
-    except Exception as exc:
-        # Retry the task if it fails
-        raise self.retry(exc=exc)
-
-
-# HTML Template for displaying device information and battery insights
+# HTML Template for displaying device information, battery insights, APK analysis, and crypto data
 html_template = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Information and Battery Insights</title>
+    <title>Device Information, Battery Insights, APK Analysis, and Cryptocurrency Data</title>
     <style>
         body {{ font-family: Arial, sans-serif; }}
         h1, h2 {{ color: #2c3e50; }}
         .container {{ width: 80%; margin: 0 auto; }}
-        .info-box {{ border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; background-color: #f9f9f9; }}
-        .graph-box {{ text-align: center; }}
+        .info-box, .table-box {{ border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; background-color: #f9f9f9; }}
+        .graph-box {{ text-align: center; margin-bottom: 20px; }}
         #batteryGraph {{ max-width: 100%; height: auto; }}
+        table {{ width: 100%; border-collapse: collapse; margin-bottom: 20px; }}
+        th, td {{ text-align: left; padding: 8px; border: 1px solid #ddd; }}
+        th {{ background-color: #f2f2f2; }}
+        td {{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
     </style>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
@@ -135,6 +168,52 @@ html_template = """
         <h2>Battery Insights</h2>
         <div class="graph-box">
             <div id="batteryGraph"></div>
+        </div>
+
+        <h2>APK Analysis</h2>
+        <div class="table-box">
+            <table>
+                <tr>
+                    <th>Package Name</th>
+                    <th>Version</th>
+                    <th>Permissions</th>
+                    <th>Activities</th>
+                    <th>Services</th>
+                    <th>Receivers</th>
+                    <th>Providers</th>
+                    <th>Files</th>
+                    <th>Timestamp</th>
+                </tr>
+                <tr>
+                    <td>{package_name}</td>
+                    <td>{version}</td>
+                    <td>{permissions}</td>
+                    <td>{activities}</td>
+                    <td>{services}</td>
+                    <td>{receivers}</td>
+                    <td>{providers}</td>
+                    <td>{files}</td>
+                    <td>{timestamp}</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>Cryptocurrency Data</h2>
+        <div class="table-box">
+            <table>
+                <tr>
+                    <th>Market</th>
+                    <th>VolumeEx</th>
+                    <th>VolumeQt</th>
+                    <th>Price Change</th>
+                    <th>Quick Trade Price</th>
+                    <th>Pair</th>
+                    <th>Virtual Currency</th>
+                    <th>Currency</th>
+                    <th>Volume</th>
+                </tr>
+                {crypto_rows}
+            </table>
         </div>
     </div>
     <script>
@@ -191,46 +270,7 @@ html_template = """
 </html>
 """
 
-# Lifespan event handler to manage subprocess
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    processes = []
-
-    try:
-        # Path to the Python executable
-        python_executable = sys.executable
-
-        # Define the scripts to run
-        scripts_to_run = [
-            r'C:\Appy\scripts\uiautomator_deviceinfo.py',
-            r'C:\Appy\scripts\zeb.py',
-            r'C:\Appy\scripts\chrome_analysis.py'
-        ]
-
-        # Launch each script as a subprocess
-        for script in scripts_to_run:
-            try:
-                process = subprocess.Popen([python_executable, script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                processes.append(process)
-                print(f"Started {script} successfully!")
-
-            except Exception as e:
-                print(f"Error starting {script}: {e}")
-
-    except Exception as e:
-        print(f"Error during subprocess initialization: {e}")
-
-    yield
-
-    # Terminate all subprocesses on shutdown
-    for process in processes:
-        if process.poll() is None:  # Check if process is still running
-            process.terminate()
-            print(f"Terminated subprocess: {process.args}")
-
-app = FastAPI(lifespan=lifespan)
-
-# Endpoint to get the device info and battery insights
+# Endpoint to get the device info, battery insights, APK analysis, and cryptocurrency data
 @app.get("/", response_class=HTMLResponse)
 async def get_device_info():
     try:
@@ -239,7 +279,6 @@ async def get_device_info():
 
         latest_entry = data[-1] if isinstance(data, list) else data
 
-        # Insert the data into the database
         insert_into_db(latest_entry)
 
         about_device = latest_entry.get("About device", "N/A")
@@ -249,13 +288,34 @@ async def get_device_info():
         ram = latest_entry.get("RAM", "N/A")
         battery_capacity = latest_entry.get("Battery capacity", "N/A")
 
+        # Get APK metadata
+        apk_metadata = get_latest_apk_metadata()
+
+        # Get cryptocurrency data
+        crypto_data = get_crypto_data()
+
+        crypto_rows = ''.join([
+            f"<tr><td>{row['market']}</td><td>{row['volumeEx']}</td><td>{row['volumeQt']}</td><td>{row['pricechange']}</td><td>{row['quickTradePrice']}</td><td>{row['pair']}</td><td>{row['virtualCurrency']}</td><td>{row['currency']}</td><td>{row['volume']}</td></tr>"
+            for row in crypto_data
+        ])
+
         html_content = html_template.format(
             about_device=about_device,
             device_name=device_name,
             model=model,
             processor=processor,
             ram=ram,
-            battery_capacity=battery_capacity
+            battery_capacity=battery_capacity,
+            package_name=apk_metadata.get("package_name", "N/A"),
+            version=apk_metadata.get("version", "N/A"),
+            permissions=apk_metadata.get("permissions", "N/A"),
+            activities=apk_metadata.get("activities", "N/A"),
+            services=apk_metadata.get("services", "N/A"),
+            receivers=apk_metadata.get("receivers", "N/A"),
+            providers=apk_metadata.get("providers", "N/A"),
+            files=apk_metadata.get("files", "N/A"),
+            timestamp=apk_metadata.get("timestamp", "N/A"),
+            crypto_rows=crypto_rows  # Adding the crypto rows here
         )
 
         return HTMLResponse(content=html_content)
@@ -263,17 +323,15 @@ async def get_device_info():
     except Exception as e:
         return HTMLResponse(content=f"Error: {str(e)}", status_code=500)
 
-# WebSocket endpoint for live updates
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    
+
     while True:
         try:
             with open(json_file_path, 'r') as json_file:
                 data = json.load(json_file)
 
-            # Filter data for only the past 2 hours
             current_time = datetime.now()
             two_hours_ago = current_time - timedelta(hours=24)
 
@@ -287,10 +345,9 @@ async def websocket_endpoint(websocket: WebSocket):
 
             if len(timestamps) == 0 or len(battery_levels) == 0:
                 print("No data for the past 2 hours, waiting for current data...")
-                await asyncio.sleep(60)  # Wait for 1 minute and retry
-                continue  # Retry the loop to check for new data
+                await asyncio.sleep(60) 
+                continue  
 
-            # Prepare Plotly trace for the graph
             trace = go.Scatter(
                 x=timestamps,
                 y=battery_levels,
@@ -319,5 +376,10 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.close()
             break
 
+# Start the mobile automation script as a subprocess
+def run_mobile_automation():
+    subprocess.Popen([sys.executable, "mobile_automation.py"])
+
 if __name__ == "__main__":
+    run_mobile_automation()  # Launch mobile automation as a subprocess
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

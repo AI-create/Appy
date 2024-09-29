@@ -4,6 +4,7 @@ import json
 import random
 import urllib3
 import datetime
+import sqlite3
 
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -42,6 +43,29 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G950F Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/67.0.3396.87 Mobile Safari/537.36'
 }
 
+# SQLite DB connection setup
+conn = sqlite3.connect('zebpay_data.db')
+cursor = conn.cursor()
+
+# Create table if not exists
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS zebpay_data (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    market TEXT,
+    volumeEx REAL,
+    volumeQt REAL,
+    pricechange TEXT,
+    quickTradePrice TEXT,
+    pair TEXT,
+    virtualCurrency TEXT,
+    currency TEXT,
+    volume REAL
+)
+''')
+
+# Commit to save table creation
+conn.commit()
+
 # Function to save scraped data to the JSON file immediately
 def save_data_immediately(data):
     try:
@@ -53,6 +77,32 @@ def save_data_immediately(data):
             print(f"Data saved to {output_json_file} at {timestamp}")
     except Exception as e:
         print(f"Error while saving the data: {str(e)}")
+
+# Function to insert or update data into the SQLite database
+def insert_data_into_db(data):
+    try:
+        for record in data["response"]:
+            cursor.execute('''
+                INSERT INTO zebpay_data (
+                    market, volumeEx, volumeQt, pricechange, quickTradePrice, pair, virtualCurrency, currency, volume
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                record.get('market'),
+                record.get('volumeEx', 0),
+                record.get('volumeQt', 0),
+                record.get('pricechange'),
+                record.get('quickTradePrice'),
+                record.get('pair'),
+                record.get('virtualCurrency'),
+                record.get('currency'),
+                record.get('volume', 0)
+            ))
+
+        # Commit the transaction
+        conn.commit()
+        print("Data inserted into database successfully.")
+    except Exception as e:
+        print(f"Error while inserting data into the database: {str(e)}")
 
 # Function to make a request using a proxy
 def make_request(proxy, url, retries=0):
@@ -75,6 +125,10 @@ def make_request(proxy, url, retries=0):
 
             # Immediately save to file
             save_data_immediately(data)
+
+            # Insert data into SQLite database
+            insert_data_into_db(data)
+
             return True
         else:
             print(f"Non-JSON response from {url}: {response.text}")

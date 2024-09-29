@@ -3150,5 +3150,37 @@
         "Android version": "14",
         "Battery level": "72",
         "Timestamp": "2024-09-28 20:37:22"
+    },
+    {
+        "About device": "OxygenOS",
+        "14.0": "Official version",
+        "Device name": "oneplus9R",
+        "Storage": "241 GB / 256 GB",
+        "Model": "LE2111",
+        "Processor": "Qualcomm® Snapdragon™ 888 Octa-core",
+        "Battery capacity": "4500 mAh (TYP)",
+        "Screen size": "16.64 cm",
+        "RAM": "12.0 GB",
+        "Cameras Front": "16MP",
+        "Rear": "48MP+50MP+2MP",
+        "Android version": "14",
+        "Battery level": "21",
+        "Timestamp": "2024-09-29 01:19:35"
+    },
+    {
+        "About device": "OxygenOS",
+        "14.0": "Official version",
+        "Device name": "oneplus9R",
+        "Storage": "241 GB / 256 GB",
+        "Model": "LE2111",
+        "Processor": "Qualcomm® Snapdragon™ 888 Octa-core",
+        "Battery capacity": "4500 mAh (TYP)",
+        "Screen size": "16.64 cm",
+        "RAM": "12.0 GB",
+        "Cameras Front": "16MP",
+        "Rear": "48MP+50MP+2MP",
+        "Android version": "14",
+        "Battery level": "17",
+        "Timestamp": "2024-09-29 03:35:13"
     }
 ]

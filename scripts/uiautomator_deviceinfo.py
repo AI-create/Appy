@@ -7,7 +7,7 @@ import schedule
 # Function to run the automation script
 def run_automation_script():
     # Connect to the Android device
-    device = u2.connect()  # Automatically connect to the first available device
+    device = u2.connect('c26d8eaa')  # Automatically connect to the first available device
 
     # Verify connection
     if device.info:
