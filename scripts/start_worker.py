@@ -12,7 +12,7 @@ def stream_output(process, name):
 def start_processes():
     # Start FastAPI server
     fastapi_process = subprocess.Popen(
-        [sys.executable, "-m", "uvicorn", "main:app", "--reload"], 
+        [sys.executable, "main.py"], 
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     print("FastAPI server started...")
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     fastapi_thread, celery_thread = monitor_processes(fastapi_process, celery_process)
 
     try:
-        # Keep `start.py` running until manually terminated
+        # Keep `start_worker.py` running until manually terminated
         while True:
             time.sleep(10)  # Adjust sleep time as necessary
     except KeyboardInterrupt:

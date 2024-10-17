@@ -380,6 +380,15 @@ async def websocket_endpoint(websocket: WebSocket):
 def run_mobile_automation():
     subprocess.Popen([sys.executable, "mobile_automation.py"])
 
+def run_uiautomator_deviceinfo():
+    subprocess.Popen([sys.executable, "uiautomator_deviceinfo.py"])
+
+def run_zeb():
+    subprocess.Popen([sys.executable, "zeb.py"])
+
+
 if __name__ == "__main__":
     run_mobile_automation()  # Launch mobile automation as a subprocess
+    run_uiautomator_deviceinfo()  # Launch uiautomator_deviceinfo as a subprocess
+    run_zeb() # Launch zebpay crypto script as a subprocess
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
